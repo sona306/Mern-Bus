@@ -3,7 +3,8 @@ const mongoose = require("mongoose")
 const cors = require("cors")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
-const {ksrtcmodel}=require("./models/user")
+const {ksrtcmodel} = require("./models/user")
+const {busaddmodel} = require("./models/bus")
 
 const app =express()
 app.use(cors())
@@ -92,6 +93,38 @@ app.post("/viewusers",(req,res)=>{
             
         }
     })
+})
+
+app.post("/addbus",(req,res)=>{
+    let input=req.body
+    let bus=new busaddmodel(input)
+    bus.save()
+    res.json({"status":"success"})
+})
+
+app.post("/viewbus",(req,res)=>{
+    busaddmodel.find().then(
+        (data)=>{
+            res.json(data)
+        }
+    ).catch(
+        (error)=>{
+            res.json(error)
+        }
+    ) 
+})
+
+app.post("/searchbus",(req,res)=>{
+    let input=req.body
+    busaddmodel.find(input).then(
+        (data)=>{
+            res.json(data)
+        }
+    ).catch(
+        (error)=>{
+        res.json(error)
+        }
+    )
 })
 
 app.listen(8089,()=>{
